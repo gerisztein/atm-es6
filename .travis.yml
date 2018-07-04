@@ -1,8 +1,10 @@
 language: node_js
+
 node_js:
   - "stable"
-  - "10"
+
 dist: trusty
+
 sudo: false
 
 branches:
