@@ -2,52 +2,42 @@ import Errors from './Exceptions.js';
 
 export default class CashMachine {
   constructor () {
-    this.bills = [10, 20, 50, 100].sort((x, y) => x + y);
+    this.bills = [10, 20, 50, 100].sort((x, y) => y - x);
     this.minimum = Math.min(...this.bills);
-    this.counter = {}
-    
-    for (let bill in this.bills) {
-      this.counter[this.bills[bill]] = 0
-    }
   }
 
   validate (value) {
     const min = this.minimum;
-    let error;
 
     if (!value) {
-      error = Errors.EMPTY_SET;
-      
-      this.printResponse(error.message, true);
-      error.throw();
+      this.handleError('EMPTY_SET')
     }
 
     if (value < 0) {
-      error = Errors.InvalidArgumentException;
-      
-      this.printResponse(error.message, true);
-      error.throw();
+      this.handleError('InvalidArgumentException');
     }
 
     if (value % min) {
-      error = Errors.NoteUnavailableException;
-      
-      this.printResponse(error.message, true);
-      error.throw();
+      this.handleError('NoteUnavailableException');
     }
   }
 
   calculate (value) {
-    this.bills.map(bill => {
-      if (value) {
+    return this.bills
+      .reduce((counter, bill) => {
         const numBills = Math.floor(value / bill);
-        this.counter[bill] = numBills;
+        counter[bill] = numBills;
+        value -= (numBills * bill);
 
-        value = value - (numBills * bill);
-      }
-    })
+        return counter;
+      }, {})
+  }
 
-    return this.counter
+  handleError (error) {
+    const obj = Errors[error];
+
+    this.printResponse(obj.message, true);
+    obj.throw();
   }
 
   withdraw (value) {
@@ -55,10 +45,9 @@ export default class CashMachine {
     this.printResponse(this.calculate(value));
   }
 
-  printResponse (message, error) {
+  printResponse (message = '', error) {
     let list;
     const response = document.getElementById('response');
-    message = message || '';
 
     response.classList.remove('error');
     response.innerHTML = '';
@@ -72,10 +61,10 @@ export default class CashMachine {
 
     list = document.createElement('ul');
 
-    for (let value in this.counter) {
-      if (this.counter.hasOwnProperty(value) && this.counter[value]) {
+    for (let value in message) {
+      if (message.hasOwnProperty(value) && message[value]) {
         const item = document.createElement('li');
-        const count = this.counter[value];
+        const count = message[value];
         const formatted = parseFloat(value).toFixed(2);
         const text = `<span>${count} x $<span>${formatted}</span>`;
         item.innerHTML = text;
