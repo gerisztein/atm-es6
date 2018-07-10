@@ -25,7 +25,7 @@ The rules are simple:
 - Amount of bills/money is infinite
 - Available bills $100, $50, $20 and $10
 
-## Example
+## Examples
 
 **Entry:** 30  
 **Result:** [20, 10]
@@ -43,7 +43,7 @@ The rules are simple:
 **Result:** *throw InvalidArgumentException*
 
 **Entry:** NULL  
-**Result:** *[Empty Set]*
+**Result:** *throw [EMPTY SET]*
 
 ## Installation
 
@@ -81,3 +81,7 @@ A working version of the project is also available [here](https://gerisztein.git
 - [Vanilla Javascript](http://es6-features.org/) (ES6)
 - [Husky](https://github.com/typicode/husky/) and [Commitlint](https://github.com/marionebl/commitlint) - Commit linter
 - [TravisCI](https://travis-ci.org/) - Continuous Integration
+
+## License
+
+MIT License &copy; Lucas Gerisztein
