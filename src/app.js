@@ -1,14 +1,14 @@
 import CashMachine from './components/CashMachine.js';
 
-const form = document.getElementById('form');
+const formATM = document.getElementById('form');
 const Cash = new CashMachine();
 
-form.addEventListener('submit', withdraw);
+formATM.addEventListener('submit', withdrawMoney);
 
-function withdraw (e) {
+function withdrawMoney (e) {
   const amountInput = document.getElementById('amount');
-  const amount = +amountInput.value;
+  const amountValue = +amountInput.value;
 
   e.preventDefault();
-  Cash.withdraw(amount);
+  Cash.withdraw(amountValue);
 }

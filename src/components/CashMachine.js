@@ -1,33 +1,34 @@
 import Errors from './Exceptions.js';
 
 export default class CashMachine {
-  constructor () {
-    this.bills = [10, 20, 50, 100].sort((x, y) => y - x);
-    this.minimum = Math.min(...this.bills);
+  constructor (options = {}) {
+    const defaultBills = [10, 20, 50, 100]
+
+    this.availableBills = options.availableBills || defaultBills;
+    this.availableBills = this.availableBills.sort((x, y) => y - x);
+    this.lowestValue = Math.min(...this.availableBills);
   }
 
   validate (value) {
-    const min = this.minimum;
-
     if (!value) {
-      this.handleError('EMPTY_SET')
+      this.handleError('EMPTY_SET');
     }
 
     if (value < 0) {
       this.handleError('InvalidArgumentException');
     }
 
-    if (value % min) {
+    if (value % this.lowestValue) {
       this.handleError('NoteUnavailableException');
     }
   }
 
   calculate (value) {
-    return this.bills
+    return this.availableBills
       .reduce((counter, bill) => {
-        const numBills = Math.floor(value / bill);
-        counter[bill] = numBills;
-        value -= (numBills * bill);
+        const totalBills = Math.floor(value / bill);
+        counter[bill] = totalBills;
+        value -= (totalBills * bill);
 
         return counter;
       }, {})
@@ -45,33 +46,34 @@ export default class CashMachine {
     this.printResponse(this.calculate(value));
   }
 
-  printResponse (message = '', error) {
-    let list;
+  printResponse (message = '', isError) {
     const response = document.getElementById('response');
 
     response.classList.remove('error');
     response.innerHTML = '';
 
-    if (error) {
-      response.className += 'error';
+    if (isError) {
+      response.classList.add('error');
       response.innerHTML = message;
       
       return;
     }
 
-    list = document.createElement('ul');
+    const list = document.createElement('ul');
 
-    for (let value in message) {
+    for (const value in message) {
       if (message.hasOwnProperty(value) && message[value]) {
         const item = document.createElement('li');
-        const count = message[value];
-        const formatted = parseFloat(value).toFixed(2);
-        const text = `<span>${count} x $<span>${formatted}</span>`;
-        item.innerHTML = text;
+        const billsCount = message[value].toLocaleString();
+        const formattedValue = value.toLocaleString();
+        const resultText = `<span>${billsCount} x $<span>${formattedValue}</span>`;
+        
+        item.innerHTML = resultText;
         
         list.appendChild(item);
-        response.appendChild(list);
       }
     }
+    
+    response.appendChild(list);
   }
 }

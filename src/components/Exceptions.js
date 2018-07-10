@@ -46,7 +46,7 @@ const Errors = {
   },
   
   NoteUnavailableException: {
-    message: `Withdrawal is not possible with the available bills`,
+    message: 'Withdrawal is not possible with the available bills',
     throw: () => {
       try {
         throw new NoteUnavailableException(Errors.NoteUnavailableException.message);
