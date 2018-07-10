@@ -16,6 +16,7 @@ Or access the [live demo](https://gerisztein.github.io/atm-es6).
 ## Description
 
 This is an exercise that simulates an **ATM** (Cash Machine).
+It was written in Vanilla Javascript (ES6).
 
 The rules are simple:
 
@@ -28,13 +29,13 @@ The rules are simple:
 ## Examples
 
 **Entry:** 30  
-**Result:** [20, 10]
+**Result:** { 20: 1, 10: 1 }
 
 **Entry:** 80  
-**Result:** [50, 20, 10]
+**Result:** { 50: 1, 20: 1, 10: 1 }
 
 **Entry:** 280  
-**Result:** [2 * 100, 50, 20, 10]
+**Result:** { 100: 2, 50:1 , 20: 1, 10: 1 }
 
 **Entry:** 125  
 **Result:** *throw NoteUnavailableException*
