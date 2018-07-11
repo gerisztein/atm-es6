@@ -66,11 +66,15 @@ Serve it locally
 ```shell
 $ npm run serve
 ```
-Then open the browser with the URL provided in the terminal, usually it is [http://localhost:8080](http://localhost:8080).
+
+Right after that, it'll open the browser.  
+Usually the URL is [http://localhost:8080](http://localhost:8080).
 
 ## Live Demo
 
-A working version of the project is also available [here](https://gerisztein.github.io/atm-es6).
+A working version of the project is also available [here](https://gerisztein.github.io/atm-es6).  
+
+[https://gerisztein.github.io/atm-es6](https://gerisztein.github.io/atm-es6)
 
 ## Tech Stack
 

@@ -1,3 +1,11 @@
+class EMPTY_SET extends Error {
+  constructor (message) {
+    super(message);
+    
+    this.name = '[EMPTY SET]';
+  }
+}
+
 class InvalidArgumentException extends Error {
   constructor (message) {
     super(message);
@@ -14,16 +22,10 @@ class NoteUnavailableException extends Error {
   }
 }
 
-class EMPTY_SET extends Error {
-  constructor (message) {
-    super(message);
-    
-    this.name = '[EMPTY SET]';
-  }
-}
 
 const Errors = {
   EMPTY_SET: {
+    isValid: false,
     message: 'The value must be filled',
     throw: () => {
       try {
@@ -35,6 +37,7 @@ const Errors = {
   },
   
   InvalidArgumentException: {
+    isValid: false,
     message: 'The value must be positive',
     throw: () => {
       try {
@@ -46,6 +49,7 @@ const Errors = {
   },
   
   NoteUnavailableException: {
+    isValid: false,
     message: 'Withdrawal is not possible with the available bills',
     throw: () => {
       try {

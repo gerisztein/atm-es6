@@ -2,25 +2,11 @@ import Errors from './Exceptions.js';
 
 export default class CashMachine {
   constructor (options = {}) {
-    const defaultBills = [10, 20, 50, 100]
+    const defaultBills = [10, 20, 50, 100];
 
     this.availableBills = options.availableBills || defaultBills;
     this.availableBills = this.availableBills.sort((x, y) => y - x);
     this.lowestValue = Math.min(...this.availableBills);
-  }
-
-  validate (value) {
-    if (!value) {
-      this.handleError('EMPTY_SET');
-    }
-
-    if (value < 0) {
-      this.handleError('InvalidArgumentException');
-    }
-
-    if (value % this.lowestValue) {
-      this.handleError('NoteUnavailableException');
-    }
   }
 
   calculate (value) {
@@ -31,40 +17,32 @@ export default class CashMachine {
         value -= (totalBills * bill);
 
         return counter;
-      }, {})
+      }, {});
   }
 
   handleError (error) {
-    const obj = Errors[error];
-
-    this.printResponse(obj.message, true);
-    obj.throw();
+    return Errors[error];
   }
+  
+  printResponse (response = {}, isError) {
+    const container = document.getElementById('response');
 
-  withdraw (value) {
-    this.validate(value);
-    this.printResponse(this.calculate(value));
-  }
+    container.classList.remove('error');
+    container.innerHTML = '';
 
-  printResponse (message = '', isError) {
-    const response = document.getElementById('response');
+    if (response.isValid === false) {
+      container.classList.add('error');
+      container.innerHTML = response.message;
 
-    response.classList.remove('error');
-    response.innerHTML = '';
-
-    if (isError) {
-      response.classList.add('error');
-      response.innerHTML = message;
-      
-      return;
+      response.throw();
     }
 
     const list = document.createElement('ul');
 
-    for (const value in message) {
-      if (message.hasOwnProperty(value) && message[value]) {
+    for (const value in response) {
+      if (response.hasOwnProperty(value) && response[value]) {
         const item = document.createElement('li');
-        const billsCount = message[value].toLocaleString();
+        const billsCount = response[value].toLocaleString();
         const formattedValue = value.toLocaleString();
         const resultText = `<span>${billsCount} x $<span>${formattedValue}</span>`;
         
@@ -74,6 +52,35 @@ export default class CashMachine {
       }
     }
     
-    response.appendChild(list);
+    container.appendChild(list);
+  }
+
+  validate (value) {
+    if (!value) {
+      return this.handleError('EMPTY_SET');
+    }
+
+    if (value < 0) {
+      return this.handleError('InvalidArgumentException');
+    }
+
+    if (value % this.lowestValue) {
+      return this.handleError('NoteUnavailableException');
+    }
+
+    return {
+      isValid: true,
+      message: value
+    };
+  }
+
+  withdraw (value) {
+    const validate = this.validate(value);
+    const isValid = validate.isValid;
+    const response = isValid
+      ? this.calculate(validate.message)
+      : validate;
+
+    this.printResponse(response);
   }
 }
