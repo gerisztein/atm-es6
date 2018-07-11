@@ -24,7 +24,7 @@ export default class CashMachine {
     return Errors[error];
   }
   
-  printResponse (response = {}, isError) {
+  printResponse (response = {}) {
     const container = document.getElementById('response');
 
     container.classList.remove('error');
